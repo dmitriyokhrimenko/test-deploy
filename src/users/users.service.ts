@@ -14,10 +14,10 @@ export class UsersService {
     return this.usersRepository.findOne(id);
   }
 
-  findByLogin(login: string): Promise<User> {
+  findByEmail(email: string): Promise<User> {
     return this.usersRepository.findOne({
       where: {
-        login: login,
+        email: email,
       },
     });
   }
