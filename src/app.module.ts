@@ -1,36 +1,36 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from './components/auth/auth.module';
 import configuration from '../config/configuration';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/user.entity';
+import { KnexModule } from 'nestjs-knex';
 
 @Module({
   imports: [
-    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
       expandVariables: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mssql',
-      host: 'localhost',
-      port: 1433,
-      username: 'SA',
-      password: 'p1rrmJim',
-      database: 'bselscript',
-      entities: [User],
-      synchronize: true,
-      options: {
-        encrypt: false,
+    KnexModule.forRoot({
+      config: {
+        client: process.env.DB_CLIENT,
+        useNullAsDefault: true,
+        debug: false,
+        connection: {
+          host: process.env.DB_HOST,
+          user: process.env.DB_USERNAME,
+          password: process.env.DB_PASSWORD,
+          database: process.env.DB_NAME,
+          port: parseInt(process.env.DB_PORT) | 1433,
+          options: {
+            encrypt: false,
+          },
+        },
       },
     }),
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

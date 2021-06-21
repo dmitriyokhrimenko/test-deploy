@@ -1,7 +1,19 @@
+console.log(process.env.DATABASE_HOST);
+
 export default () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
   database: {
-    host: process.env.DATABASE_HOST,
-    port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
+    client: process.env.DB_CLIENT,
+    debug: false,
+    connection: {
+      host: process.env.DATABASE_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      port: parseInt(process.env.DB_PORT, 10) || 1433,
+      options: {
+        encrypt: false,
+      },
+    },
   },
 });
