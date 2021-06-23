@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('workers', {
+@Entity('buusers', {
   synchronize: false,
 })
 export class User {
@@ -8,13 +8,31 @@ export class User {
   id: number;
 
   @Column()
+  username: string;
+
+  @Column()
+  usergroup: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  phone: string;
+
+  @Column()
+  picture: string;
+
+  @Column()
+  parentid: string;
+
+  @Column()
+  permissions: string;
+
+  @Column()
   firstname: string;
 
   @Column()
   lastname: string;
-
-  @Column()
-  email: string;
 
   @Column()
   pass: string;

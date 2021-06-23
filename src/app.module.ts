@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './components/auth/auth.module';
+import { UsersModule } from './components/users/users.module';
 import configuration from '../config/configuration';
 import { KnexModule } from 'nestjs-knex';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './components/users/user.entity';
 
 @Module({
   imports: [
@@ -28,7 +31,21 @@ import { KnexModule } from 'nestjs-knex';
         },
       },
     }),
+    TypeOrmModule.forRoot({
+      type: 'mssql',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT) | 1433,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      synchronize: false,
+      entities: [User],
+      options: {
+        encrypt: false,
+      },
+    }),
     AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
