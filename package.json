@@ -32,6 +32,7 @@
     "@nestjs/typeorm": "^7.1.5",
     "@nestjsplus/config": "^1.0.14",
     "@nestjsplus/knex": "github:dmitriyokhrimenko/nestjs-knex#master",
+    "csurf": "^1.11.0",
     "knex": "^0.95.6",
     "mssql": "^7.1.3",
     "nestjs-knex": "^2.0.0",
