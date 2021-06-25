@@ -1,13 +1,17 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { LoggerMiddleware } from '../common/middleware/logger.middleware';
 import { ConfigModule } from '@nestjs/config';
+import configuration from '../config/configuration';
+import { ConfigService } from '@nestjs/config';
 import { AuthModule } from './components/auth/auth.module';
 import { UsersModule } from './components/users/users.module';
-import configuration from '../config/configuration';
+import { User } from './components/users/user.entity';
+import { UsersController } from './components/users/users.controller';
 import { KnexModule } from 'nestjs-knex';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './components/users/user.entity';
-import { LoggerMiddleware } from '../common/middleware/logger.middleware';
-import { UsersController } from './components/users/users.controller';
+import { I18nModule, I18nJsonParser } from 'nestjs-i18n';
+import * as path from 'path';
+import { log } from 'util';
 
 @Module({
   imports: [
@@ -33,19 +37,19 @@ import { UsersController } from './components/users/users.controller';
         },
       },
     }),
-    TypeOrmModule.forRoot({
-      type: 'mssql',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT) | 1433,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      synchronize: false,
-      entities: [User],
-      options: {
-        encrypt: false,
-      },
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) =>
+        configService.get('database'),
+      inject: [ConfigService],
     }),
+    // I18nModule.forRoot({
+    //   fallbackLanguage: 'en',
+    //   parser: I18nJsonParser,
+    //   parserOptions: {
+    //     path: path.join(__dirname, '/components/i18n/'),
+    //   },
+    // }),
     AuthModule,
     UsersModule,
   ],

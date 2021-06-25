@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Logger, Inject } from '@nestjs/common';
 // import { InjectKnex, Knex } from 'nestjs-knex';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
