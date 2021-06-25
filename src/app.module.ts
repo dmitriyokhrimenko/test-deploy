@@ -11,7 +11,6 @@ import { KnexModule } from 'nestjs-knex';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nModule, I18nJsonParser } from 'nestjs-i18n';
 import * as path from 'path';
-import { log } from 'util';
 
 @Module({
   imports: [
@@ -43,13 +42,13 @@ import { log } from 'util';
         configService.get('database'),
       inject: [ConfigService],
     }),
-    // I18nModule.forRoot({
-    //   fallbackLanguage: 'en',
-    //   parser: I18nJsonParser,
-    //   parserOptions: {
-    //     path: path.join(__dirname, '/components/i18n/'),
-    //   },
-    // }),
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      parser: I18nJsonParser,
+      parserOptions: {
+        path: path.join(__dirname, '/components/i18n/'),
+      },
+    }),
     AuthModule,
     UsersModule,
   ],
