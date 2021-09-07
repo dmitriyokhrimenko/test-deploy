@@ -5,7 +5,10 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  profile(@Request() req) {
+
+
+
     return req.user;
   }
 }

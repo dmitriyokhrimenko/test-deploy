@@ -18,10 +18,21 @@ export class AuthService {
     return null;
   }
 
+  /**
+   * Login by a username and password.
+   * Returns the accessToken and refreshToken.
+   *
+   *
+   * @param user - user object retrieved from DB storage
+   * @returns
+   * accessToken - access token
+   * refreshToken - refresh token
+   */
   async login(user: any) {
     const payload = { username: user.username, userId: user.id };
+    const accessToken = this.jwtService.sign(payload);
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken,
     };
   }
 }

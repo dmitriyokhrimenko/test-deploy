@@ -20,35 +20,38 @@ import { log } from 'util';
       load: [configuration],
       expandVariables: true,
     }),
-    KnexModule.forRoot({
-      config: {
-        client: process.env.DB_CLIENT,
-        useNullAsDefault: true,
-        debug: false,
-        connection: {
-          host: process.env.DB_HOST,
-          user: process.env.DB_USERNAME,
-          password: process.env.DB_PASSWORD,
-          database: process.env.DB_NAME,
-          port: parseInt(process.env.DB_PORT) | 1433,
-          options: {
-            encrypt: false,
-          },
-        },
-      },
-    }),
+    // KnexModule.forRoot({
+    //   config: {
+    //     client: process.env.DB_CLIENT,
+    //     useNullAsDefault: true,
+    //     debug: false,
+    //     connection: {
+    //       host: process.env.DB_HOST,
+    //       user: process.env.DB_USERNAME,
+    //       password: process.env.DB_PASSWORD,
+    //       database: process.env.DB_NAME,
+    //       port: parseInt(process.env.DB_PORT) | 1433,
+    //       options: {
+    //         encrypt: false,
+    //       },
+    //     },
+    //   },
+    // }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) =>
         configService.get('database'),
       inject: [ConfigService],
     }),
-    // I18nModule.forRoot({
-    //   fallbackLanguage: 'en',
+    // I18nModule.forRootAsync({
+    //   useFactory: (configService: ConfigService) => ({
+    //     fallbackLanguage: configService.get('fallbackLanguage'),
+    //     parserOptions: {
+    //       path: path.join(__dirname, '/i18n/'),
+    //     },
+    //   }),
     //   parser: I18nJsonParser,
-    //   parserOptions: {
-    //     path: path.join(__dirname, '/components/i18n/'),
-    //   },
+    //   inject: [ConfigService],
     // }),
     AuthModule,
     UsersModule,

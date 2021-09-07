@@ -29,4 +29,8 @@ export default () => ({
       encrypt: false,
     },
   },
+
+  lang: {
+    fallbackLanguage: 'en',
+  },
 });
