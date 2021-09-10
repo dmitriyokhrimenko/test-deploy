@@ -31,12 +31,23 @@ resource "aws_instance" "test_server" {
       private_key = file(var.ec2_instance_private_key_path)
     }
     inline = [
-      "sudo apt update",
-      "sudo apt install nano",
+      "echo '' > /dev/null",
     ]
   }
 }
 
+resource "local_file" "hosts_ini" {
+  content = templatefile("ansible/templates/hosts.tpl",
+  {
+    host = aws_instance.test_server.public_ip
+  }
+  )
+  filename = "ansible/hosts.ini"
+
+  provisioner "local-exec" {
+    command = "ansible-playbook -u ${var.ec2_instance_user} -i 'ansible/hosts.ini' --private-key ${var.ec2_instance_private_key_path} ansible/provision.yml"
+  }
+}
 //resource "local_file" "ip" {
 //    content  = aws_instance.test_server.public_ip
 //    filename = "ip.txt"
