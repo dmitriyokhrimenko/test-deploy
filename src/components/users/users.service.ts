@@ -30,4 +30,9 @@ export class UsersService {
       },
     });
   }
+
+  async update(id: number, updateData: object): Promise<User> {
+    return null;
+    //return this.usersRepository.update(id, updateData);
+  }
 }

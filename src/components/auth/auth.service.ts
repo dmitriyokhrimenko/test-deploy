@@ -35,4 +35,46 @@ export class AuthService {
       accessToken,
     };
   }
+
+  /**
+   * Send verification code to the user
+   * Returns verification code.
+   *
+   *
+   * @param user - user object retrieved from DB storage
+   * @returns
+   * accessToken - verification code
+   */
+  async forgotPassword(user: any) {
+    //TODO: sending verification code to user
+
+    //TODO: move to helper
+    const max = 1000000;
+    const min = 100000;
+    const verificationCode = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    return {
+      verificationCode
+    };
+  }
+
+  /**
+   * Send verification code to the user
+   * Returns verification code.
+   *
+   *
+   * @param user - user object retrieved from DB storage
+   * @returns
+   * accessToken - verification code
+   */
+   async restorePassword(user: any, verificationCode: number, newPassword: string) {
+    
+    if(verificationCode) {
+      const updateResult = await this.usersService.update(user.id, { password: newPassword });
+    }
+    
+    return {
+      success: true
+    };
+  }
 }
