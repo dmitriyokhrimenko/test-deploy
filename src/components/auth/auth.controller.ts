@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Get, UseGuards, Request } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Logger, Inject } from '@nestjs/common';
 // import { InjectKnex, Knex } from 'nestjs-knex';
@@ -16,5 +16,19 @@ export class AuthController {
     Logger.log('get request /login', 'AuthController');
 
     return this.authService.login(req.user);
+  }
+
+  @Get('forgot-password')
+  async forgotPassword(@Request() req) {
+    Logger.log('get request /forgotPassword', 'AuthController');
+
+    return this.authService.forgotPassword(req.user);
+  }
+
+  @Post('forgot-password')
+  async restorePassword(@Request() req) {
+    Logger.log('post request /forgotPassword', 'AuthController');
+
+    return this.authService.restorePassword(req.user, req.verificationCode, req.newPassword);
   }
 }
