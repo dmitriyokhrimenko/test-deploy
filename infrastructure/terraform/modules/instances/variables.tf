@@ -21,6 +21,11 @@ variable "key_name" {
   default = "sshKeyRyde"
 }
 
+variable "ec2_user" {
+  type = string
+  default = "ubuntu"
+}
+
 variable "mgmt_ips" {
   default = ["0.0.0.0/0"]
 }
@@ -35,7 +40,13 @@ variable "vpc_public_subnet" {
   type        = string
 }
 
-variable "default_security_group_id" {
-  description = "default_security_group_id"
+variable "security_group_id" {
+  description = "security_group_id"
   type        = string
+}
+
+variable "ec2_instance_private_key_path" {
+  description = "AWS EC2 instance private ssh key path."
+  type        = string
+  default     = "/Users/easternpeak/Downloads/sshKeyRyde.pem"
 }

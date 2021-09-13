@@ -50,5 +50,5 @@ module "instances" {
   application = ""
   vpc_private_subnet = module.vpc.vpc-privatesubnet-id_0
   vpc_public_subnet = module.vpc.vpc-publicsubnet-id_0
-  default_security_group_id = module.vpc.default_security_group_id
+  security_group_id = module.vpc.security_group_id
 }
