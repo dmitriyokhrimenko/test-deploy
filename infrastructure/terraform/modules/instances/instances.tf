@@ -72,6 +72,7 @@ resource "aws_eip" "jumpbox-eip" {
 }
 
 resource "local_file" "ssh_config" {
+  depends_on = [aws_eip.jumpbox-eip, aws_instance.app-instance, aws_instance.jumpbox, local_file.hosts_ini]
   content = templatefile("/Users/easternpeak/www/ryde-core/infrastructure/terraform/templates/ssh_config.tpl",
   {
     bastion_host = aws_eip.jumpbox-eip.public_ip,
@@ -80,7 +81,20 @@ resource "local_file" "ssh_config" {
   )
   filename = "/Users/easternpeak/.ssh/aws"
 
+  connection {
+    type = "ssh"
+    user = var.ec2_user
+    host = aws_eip.jumpbox-eip.public_ip
+    private_key = file(var.ec2_instance_private_key_path)
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo '' > /dev/null",
+    ]
+  }
+
   provisioner "local-exec" {
-    command = "ansible-playbook -u ${var.ec2_user} -i 'ansible/hosts.ini' /Users/easternpeak/www/ryde-core/infrastructure/ansible/provision.yml"
+    command = "ansible-playbook -u ${var.ec2_user} -i '/Users/easternpeak/www/ryde-core/infrastructure/ansible/hosts.ini' /Users/easternpeak/www/ryde-core/infrastructure/ansible/provision.yml"
   }
 }

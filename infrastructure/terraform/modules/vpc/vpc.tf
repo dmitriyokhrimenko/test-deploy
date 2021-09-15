@@ -183,28 +183,47 @@ resource "aws_route" "public_internet_gateway" {
 
   depends_on             = [aws_internet_gateway.internet_gw, aws_route_table.public_route_tables]
 }
-#---------------------------------------------------
-# CREATE EIP
-#---------------------------------------------------
-//resource "aws_eip" "nat_eip" {
-//  count       = "${var.enable_nat_gateway ? (var.single_nat_gateway ? 1 : length(var.availability_zones)) : 0}"
-//
-//  vpc         = true
-//
-//  depends_on  = [aws_internet_gateway.internet_gw]
-//}
+
+
+resource "aws_route_table" "private_route_tables" {
+  vpc_id           = "${aws_vpc.vpc.id}"
+
+  tags = {
+    Name            = "private_route_tables"
+    Environment     = "${var.environment}"
+    Orchestration   = "${var.orchestration}"
+    Createdby       = "${var.createdby}"
+  }
+
+  depends_on        = [aws_vpc.vpc]
+}
+
+//#---------------------------------------------------
+//# CREATE EIP
+//#---------------------------------------------------
+resource "aws_eip" "nat_eip" {
+  vpc         = true
+  depends_on  = [aws_internet_gateway.internet_gw]
+}
 
 #---------------------------------------------------
 # CREATE NAT
 #---------------------------------------------------
-//resource "aws_nat_gateway" "nat_gw" {
-//  count           = "${var.enable_nat_gateway ? (var.single_nat_gateway ? 1 : length(var.availability_zones)) : 0}"
-//
-//  allocation_id   = "${element(aws_eip.nat_eip.*.id, (var.single_nat_gateway ? 0 : count.index))}"
-//  subnet_id       = "${element(aws_subnet.public_subnets.*.id, (var.single_nat_gateway ? 0 : count.index))}"
-//
-//  depends_on      = [aws_internet_gateway.internet_gw, aws_subnet.public_subnets]
-//}
+resource "aws_nat_gateway" "nat_gw" {
+  allocation_id   = "${aws_eip.nat_eip.id}"
+  subnet_id       = "${aws_subnet.public_subnets[0].id}"
+
+  depends_on      = [aws_internet_gateway.internet_gw, aws_subnet.public_subnets]
+}
+
+resource "aws_route" "private_internet_nat_gw" {
+  route_table_id         = "${aws_route_table.private_route_tables.id}"
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = "${aws_nat_gateway.nat_gw.id}"
+
+  depends_on             = [aws_nat_gateway.nat_gw, aws_route_table.private_route_tables]
+}
+
 #---------------------------------------------------
 # Create private route table and the route to the internet
 #---------------------------------------------------
@@ -276,14 +295,12 @@ resource "aws_route" "public_internet_gateway" {
 ##############################
 # private
 ##############################
-//resource "aws_route_table_association" "private_route_table_associations" {
-//  count           = "${length(var.private_subnet_cidrs)}"
-//
-//  subnet_id       = "${element(aws_subnet.private_subnets.*.id, count.index)}"
-//  route_table_id  = "${element(aws_route_table.private_route_tables.*.id, count.index)}"
-//
-//  depends_on      = [aws_route_table.private_route_tables, aws_subnet.private_subnets]
-//}
+resource "aws_route_table_association" "private_route_table_associations" {
+  subnet_id       = aws_subnet.private_subnets[0].id
+  route_table_id  = "${aws_route_table.private_route_tables.id}"
+
+  depends_on      = [aws_route_table.private_route_tables, aws_subnet.private_subnets]
+}
 ##############################
 # public
 ##############################
