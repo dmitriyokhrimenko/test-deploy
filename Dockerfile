@@ -6,10 +6,9 @@ COPY ./package*.json ./
 
 RUN npm install --only=development
 
-COPY ./ .
-#COPY docker .
+COPY ./dist .
 
-RUN npm run start
+CMD [ "node", "/usr/src/app/src/main.js" ]
 
 #FROM node:alpine as production
 #
