@@ -7,7 +7,6 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  // constructor(@InjectKnex() private readonly knex: Knex) {}
   constructor(private authService: AuthService) {}
 
   @UseGuards(AuthGuard('local'))
