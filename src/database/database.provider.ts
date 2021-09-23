@@ -1,6 +1,7 @@
 import { createConnection } from 'typeorm';
 import { Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 
 export const databaseProviders = [
   {
@@ -12,11 +13,12 @@ export const databaseProviders = [
         const connName = req.headers.client;
         const client = await createConnection({
           type: 'mssql',
-          host: 'localhost',
-          port: 1344,
+          // host: 'localhost',
+          host: 'host.docker.internal',
+          port: 1433,
           username: 'SA',
           password: 'p1rrmJim',
-          database: 'elal',
+          database: 'bselscript',
           synchronize: false,
           entities: ['dist/**/**/*.entity{.ts,.js}'],
           options: {

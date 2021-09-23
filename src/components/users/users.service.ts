@@ -6,8 +6,8 @@ import { User } from './user.entity';
 @Injectable()
 export class UsersService {
   private usersRepository;
-  constructor(@Inject('DATABASE_CONNECTION') private conn) {
-    this.usersRepository = conn.getRepository(User);
+  constructor(@Inject('DATABASE_CONNECTION') private connection) {
+    this.usersRepository = connection.getRepository(User);
   }
   // constructor(
   //   @InjectRepository(User)

@@ -18,12 +18,12 @@ import * as path from 'path';
       load: [configuration],
       expandVariables: true,
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) =>
-        configService.get('database'),
-      inject: [ConfigService],
-    }),
+    // TypeOrmModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   useFactory: (configService: ConfigService) =>
+    //     configService.get('database'),
+    //   inject: [ConfigService],
+    // }),
     // I18nModule.forRootAsync({
     //   useFactory: (configService: ConfigService) => ({
     //     fallbackLanguage: configService.get('fallbackLanguage'),

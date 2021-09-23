@@ -1,20 +1,12 @@
-FROM node:alpine As development
+FROM node:alpine
+ENV NODE_ENV=production
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY ./package*.json ./
+COPY ["package.json", "package-lock.json*", "./"]
 
-RUN npm install --only=development
+RUN npm install --production
 
-COPY ./dist .
+COPY . .
 
-CMD [ "node", "/usr/src/app/src/main.js" ]
-
-#FROM node:alpine as production
-#
-#ARG NODE_ENV=production
-#ENV NODE_ENV=${NODE_ENV}
-#
-#WORKDIR /usr/src/app
-#
-#COPY ./package*.json ./
+CMD [ "node", "/app/dist/src/main.js" ]
