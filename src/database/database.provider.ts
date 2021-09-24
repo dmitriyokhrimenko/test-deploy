@@ -1,4 +1,4 @@
-import { createConnection } from 'typeorm';
+import { createConnection, getConnectionManager } from 'typeorm';
 import { Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
@@ -7,27 +7,25 @@ export const databaseProviders = [
   {
     provide: 'DATABASE_CONNECTION',
     scope: Scope.REQUEST,
-    inject: [REQUEST],
-    useFactory: async (req) => {
+    inject: [REQUEST, ConfigService],
+    useFactory: async (req, configService: ConfigService) => {
       try {
+        const tenancyTemplateConfig = configService.get('tenancyTemplate');
         const connName = req.headers.client;
-        const client = await createConnection({
-          type: 'mssql',
-          // host: 'localhost',
-          host: 'host.docker.internal',
-          port: 1433,
-          username: 'SA',
-          password: 'p1rrmJim',
-          database: 'bselscript',
-          synchronize: false,
-          entities: ['dist/**/**/*.entity{.ts,.js}'],
-          options: {
-            encrypt: false,
-          },
+        const connectionManager = getConnectionManager();
+
+        if (connectionManager.has(connName)) {
+          const connection = connectionManager.get(connName);
+          return Promise.resolve(
+            connection.isConnected ? connection : connection.connect(),
+          );
+        }
+
+        return createConnection({
+          ...tenancyTemplateConfig,
+          database: configService.get('tenancyDbNames')[connName],
           name: connName,
         });
-
-        return client;
       } catch (error) {
         throw error;
       }

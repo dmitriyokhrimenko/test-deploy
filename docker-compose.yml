@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/app
+    command: npm run start:dev
+    ports:
+      - "3005:3000"
