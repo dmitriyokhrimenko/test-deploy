@@ -9,8 +9,6 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "typescript": "3.7.2"
+    "baseUrl": "./"
   }
 }
