@@ -1,4 +1,11 @@
 version: "3.9"
+
+networks:
+  ride_db:
+    name: ride_db
+    driver: bridge
+
+
 services:
   api:
     build:
@@ -10,3 +17,7 @@ services:
     command: npm run start:dev
     ports:
       - "3005:3000"
+    extra_hosts:
+      - "docker.for.linux.localhost:$DOCKERHOST"
+    networks:
+      - ride_db

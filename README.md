@@ -44,11 +44,11 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 
-# Docker
-
 # docker compose in dev watch mode
 
 $ docker-compose up -d
+
+# Docker only
 
 # build image
 $ docker build . --tag ride-core

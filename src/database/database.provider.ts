@@ -10,21 +10,25 @@ export const databaseProviders = [
     inject: [REQUEST, ConfigService],
     useFactory: async (req, configService: ConfigService) => {
       try {
-        const tenancyTemplateConfig = configService.get('tenancyTemplate');
-        const connName = req.headers.client;
+        const clientName = req.headers.client;
         const connectionManager = getConnectionManager();
 
-        if (connectionManager.has(connName)) {
-          const connection = connectionManager.get(connName);
+        if (connectionManager.has(clientName)) {
+          const connection = connectionManager.get(clientName);
           return Promise.resolve(
             connection.isConnected ? connection : connection.connect(),
           );
         }
 
         return createConnection({
-          ...tenancyTemplateConfig,
-          database: configService.get('tenancyDbNames')[connName],
-          name: connName,
+          url: configService.get('tenancyDbConnections')[clientName],
+          type: 'mssql',
+          synchronize: false,
+          entities: ['dist/**/**/*.entity{.ts,.js}'],
+          options: {
+            encrypt: false,
+          },
+          name: clientName,
         });
       } catch (error) {
         throw error;
