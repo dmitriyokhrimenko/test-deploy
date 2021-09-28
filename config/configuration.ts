@@ -30,6 +30,34 @@ export default () => ({
     },
   },
 
+  tenancyTemplate: {
+    type: process.env.DB_CLIENT,
+    host: process.env.DB_HOST,
+    port: parseInt(process.env.DB_PORT) | 1433,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    synchronize: false,
+    entities: ['dist/**/**/*.entity{.ts,.js}'],
+    options: {
+      encrypt: false,
+    },
+  },
+
+  tenancyDbConnections: {
+    bselscript: process.env.BSELSCRIPT_DB_CONN,
+    elal: process.env.ELAL_DB_CONN,
+    sheba: process.env.SHEBA_DB_CONN,
+    intel: process.env.INTEL_DB_CONN,
+    ceragon: process.env.CERAGON_DB_CONN,
+  },
+
+  tenancyDbNames: {
+    bselscript: process.env.BSELSCRIPT_DB_NAME,
+    elal: process.env.ELAL_DB_NAME,
+    sheba: process.env.SHEBA_DB_NAME,
+    intel: process.env.INTEL_DB_NAME,
+  },
+
   lang: {
     fallbackLanguage: 'en',
   },

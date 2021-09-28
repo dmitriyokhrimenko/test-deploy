@@ -1,0 +1,21 @@
+version: "3.9"
+
+networks:
+  ride_db:
+    name: ride_db
+    driver: bridge
+
+
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    volumes:
+      - .:/app
+    command: npm run start:dev
+    ports:
+      - "3005:3000"
+    networks:
+      - ride_db
