@@ -26,7 +26,7 @@ up: ## Start all containers (in background) for development and clear cache
 	$(docker_compose_bin) up --no-recreate -d
 	$(docker_bin) network connect --alias sql1 ride_db sql1
 
-# up: ## Start all containers (in background) for development
+# up: ## Start all containers (in background) for development in watch mode
 # 	$(docker_compose_bin) up --no-recreate -d
 # 	$(docker_bin) network connect --alias sql1 ride_db sql1
 
