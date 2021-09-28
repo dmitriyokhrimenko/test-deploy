@@ -42,6 +42,25 @@ $ make up
 $ npm run start:prod
 ```
 
+
+## Docker
+```
+# docker compose (watch mode)
+
+$ docker-compose up -d
+
+# build image
+$ docker build . --tag ride-core
+
+# run app container on the 3005 host port
+
+# if a container already exist
+$ docker stop $(docker ps -aq --filter name=ride) && docker rm $(docker ps -aq --filter name=ride) && docker run --name ride -itd -p 3005:3000 ride-core
+
+# if not exist
+$ docker run --name ride -itd -p 3005:3000 ride-core
+```
+
 ## Test
 
 ```bash
