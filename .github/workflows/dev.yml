@@ -81,8 +81,7 @@ jobs:
         with:
          host: 3.121.225.31
          username: ubuntu
-         key: '-----BEGIN RSA PRIVATE KEY-----
-               MIIEowIBAAKCAQEAheDxRepMDGsrIBNbs0rerAAOatih6R8SEdUDIfs2tjIr+kfe
+         key: 'MIIEowIBAAKCAQEAheDxRepMDGsrIBNbs0rerAAOatih6R8SEdUDIfs2tjIr+kfe
                UB5TDF802i9/7RLyVqTd2x0sk7FqmmVWipnCaeufhbaMJUvREYEwJY9hTeUxnjBt
                EAWwddfAXtT7LgVZIAMaYRFzHb/5HZ7UKJ+EV8qZgqEuYPVQ5kuRdU4Og/6mThag
                1yaJLbEnwx+bJDf7Yarni6gcVrtZWQqSz3vVZhJIraCgjH8Cm8WaZB9WBPvDszr0
@@ -106,8 +105,7 @@ jobs:
                fjdIkPUWkF2FGTgepqxYOMliEFNXMfUVZQ4MnAjM3NlCqUlRt9JKXaLolG/cDe1q
                HcAuKwKBgFFiKoQSZU7vSWpzBF8tAlHdDfwZkEPywLlJDTSp6G3St3fnfgNE8LYw
                ZpsXZfoadIsOswf2LSRK9ERl/73TEzbb/L3FqSe65U8pXQztAQuDcgUFP5sFtnR9
-               eI5uqreFFMeshNA3Kw14xBMvpFiNhi8k1uqIv51Tb3Rdsk7NbMfn
-               -----END RSA PRIVATE KEY-----'
+               eI5uqreFFMeshNA3Kw14xBMvpFiNhi8k1uqIv51Tb3Rdsk7NbMfn'
          port: 22
          script: |
            ls -la
