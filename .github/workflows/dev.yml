@@ -51,7 +51,7 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: my-ecr-repo
+          ECR_REPOSITORY: ride-core
           IMAGE_TAG: ${{ github.sha }}
         run: |
           echo "REJfSE9TVD1zcWwxCkRCX05BTUU9YnNlbHNjcmlwdApEQl9VU0VSTkFNRT1TQQpEQl9QQVNTV09SRD1wMXJybUppbQpEQl9QT1JUPTE0MzMKREJfQ0xJRU5UPW1zc3FsCgojIENsaWVudCBkYXRhYmFzZSBuYW1lcwpCU0VMU0NSSVBUX0RCX0NPTk49bXNzcWw6Ly9TQTpwMXJybUppbUBzcWwxOjE0MzMvYnNlbHNjcmlwdApFTEFMX0RCX0NPTk49bXNzcWw6Ly9TQTpwMXJybUppbUBzcWwxOjE0MzMvZWxhbApTSEVCQV9EQl9DT05OPW1zc3FsOi8vU0E6cDFycm1KaW1Ac3FsMToxNDMzL3NoZWJhCklOVEVMX0RCX0NPTk49bXNzcWw6Ly9TQTpwMXJybUppbUBzcWwxOjE0MzMvaW50ZWwKQ0VSQUdPTl9EQl9DT05OPW1zc3FsOi8vU0E6cDFycm1KaW1Ac3FsMToxNDMzL2NlcmFnb24KCiMgTm8gY29sb3IgZm9yIHRoZSBjb25zb2xlIG91dHB1dCBsb2dzCiNOT19DT0xPUj0x" | base64 -d > env.txt
