@@ -22,7 +22,7 @@ jobs:
         env:
           CI: true
 
-  deploy:
+  build:
     name: CD part
     runs-on: ubuntu-latest
 
@@ -57,6 +57,60 @@ jobs:
           echo "REJfSE9TVD1zcWwxCkRCX05BTUU9YnNlbHNjcmlwdApEQl9VU0VSTkFNRT1TQQpEQl9QQVNTV09SRD1wMXJybUppbQpEQl9QT1JUPTE0MzMKREJfQ0xJRU5UPW1zc3FsCgojIENsaWVudCBkYXRhYmFzZSBuYW1lcwpCU0VMU0NSSVBUX0RCX0NPTk49bXNzcWw6Ly9TQTpwMXJybUppbUBzcWwxOjE0MzMvYnNlbHNjcmlwdApFTEFMX0RCX0NPTk49bXNzcWw6Ly9TQTpwMXJybUppbUBzcWwxOjE0MzMvZWxhbApTSEVCQV9EQl9DT05OPW1zc3FsOi8vU0E6cDFycm1KaW1Ac3FsMToxNDMzL3NoZWJhCklOVEVMX0RCX0NPTk49bXNzcWw6Ly9TQTpwMXJybUppbUBzcWwxOjE0MzMvaW50ZWwKQ0VSQUdPTl9EQl9DT05OPW1zc3FsOi8vU0E6cDFycm1KaW1Ac3FsMToxNDMzL2NlcmFnb24KCiMgTm8gY29sb3IgZm9yIHRoZSBjb25zb2xlIG91dHB1dCBsb2dzCiNOT19DT0xPUj0x" | base64 -d > env.txt
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    deploy:
+      needs: [build]
+      runs-on: ubuntu-latest
+
+      steps:
+        # Configure AWS credentials
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: 'AKIAUJBBT5OBMGRTGQUJ'
+            aws-secret-access-key: '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'
+            aws-region: eu-central-1
+
+        # Login to Amazon ECR
+        - name: Login to Amazon ECR
+          id: login-ecr
+          uses: aws-actions/amazon-ecr-login@v1
+
+        # Connect via ssh to remote server and run docker
+        - name: SSH and up a docker container
+          uses: appleboy/ssh-action@master
+          with:
+           host: 3.121.225.31
+           username: ubuntu
+           key: '-----BEGIN RSA PRIVATE KEY-----
+                 MIIEowIBAAKCAQEAheDxRepMDGsrIBNbs0rerAAOatih6R8SEdUDIfs2tjIr+kfe
+                 UB5TDF802i9/7RLyVqTd2x0sk7FqmmVWipnCaeufhbaMJUvREYEwJY9hTeUxnjBt
+                 EAWwddfAXtT7LgVZIAMaYRFzHb/5HZ7UKJ+EV8qZgqEuYPVQ5kuRdU4Og/6mThag
+                 1yaJLbEnwx+bJDf7Yarni6gcVrtZWQqSz3vVZhJIraCgjH8Cm8WaZB9WBPvDszr0
+                 lmRV68kibV16VLmzTSF+1h8ZO2j206d8X84YJYJtW+BmmWqC/iCrz/4JGoNVONU0
+                 T36N4NoXCu6OyeNOtGolvWhhZuJacOxBUnxoyQIDAQABAoIBAHpeFmnvM7+OHQbe
+                 aszAPDM+ge8LP0KTUbLW3lwq/+EcjrHfCsZ0UThXtTlQfT82OCcV3mquidYdLfEd
+                 ezKIQ/kIkvBm4EYevGOhj15lZW0LdoS+gpFIgffUUlLbnRJ9dO8bpvreNjgVBiAa
+                 0pSm6RJNbm7F4FxjHaTBoZx00jO2NG92WIQjiiCEZckQxCSigGD+dhiwebQ7+sUs
+                 treOwxPQsmmEHOkAAEBhh7HQwdnjfl/gjp8oJ+UXkTTL2SNx747W3hlmg4lrTakT
+                 9H/PxCShz4CknPax0Q2sm2FXn9zj2wpnIILDLuBRZwCXZM/STol7pQr7mzzTETwj
+                 An9UCHkCgYEAyxC1f+GTncfXUOmydkaMDemAbat3uFArRZanwYTFBHbDSbU0Luyr
+                 xvz1QrrlEZbNXNQviR010N7uK7DL2C6Hm+C8pgLNNNsy/TTJKSuLBDbOUA32JpK0
+                 KjrItJ+7sb5rVff2xov60yVOMj17fpAEE66rCU/h55uaaY2nsSljsmsCgYEAqMco
+                 kBbQaFm6h3s/+ZXAfPJJO65DB9ttC8v+0I49bu3W43BMEsu+607wuCDsBtyJxXMj
+                 vBe43sqduJ8yJK++IEZszx1WOuiukHHKqwUhkGncmjibLBadj4cajqwjqxzLLs82
+                 +75I8VOIgw5DDBevxBIWigBfosso+U9smr/KppsCgYAGA5+sguzRTnrlDZbYg+xf
+                 +RtxpBNupQkzDWw4ggsnv7C2/SPng+Duis1kxY5FQBci+bHSuMfAQOoC50CSTYZ8
+                 qmJL9GdJenh/IVIX4w9B97GSk2dH6y5k1crd9qEjeYVKTYbEiJ7MJB21xTZkIDXO
+                 s2yjYPdK2cPv/l8KEzS9swKBgQCS9b97H3Jeumqx137QKzYNVcawob8aE1UzJXB+
+                 Vqxlb9Fh/wEuiJx4NidinMAIBXYtKGGgQSOnUtPc0zmNOj2Zytipy0ivSLXfbkXj
+                 fjdIkPUWkF2FGTgepqxYOMliEFNXMfUVZQ4MnAjM3NlCqUlRt9JKXaLolG/cDe1q
+                 HcAuKwKBgFFiKoQSZU7vSWpzBF8tAlHdDfwZkEPywLlJDTSp6G3St3fnfgNE8LYw
+                 ZpsXZfoadIsOswf2LSRK9ERl/73TEzbb/L3FqSe65U8pXQztAQuDcgUFP5sFtnR9
+                 eI5uqreFFMeshNA3Kw14xBMvpFiNhi8k1uqIv51Tb3Rdsk7NbMfn
+                 -----END RSA PRIVATE KEY-----'
+           port: 22
+           script: |
+             ls -la
 #   deploy:
 #     needs: [test]
 #     runs-on: ubuntu-latest
