@@ -9,7 +9,7 @@ networks:
 services:
   api:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
       context: .
       target: development
     volumes:
