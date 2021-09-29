@@ -23,6 +23,6 @@ RUN npm install --only=production
 
 COPY --from=development /app/dist ./dist
 
-COPY .env ./.env
+COPY env.txt ./.env
 
 CMD ["node", "/app/dist/src/main"]
