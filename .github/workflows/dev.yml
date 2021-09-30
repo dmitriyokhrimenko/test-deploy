@@ -88,6 +88,7 @@ jobs:
          key: ${{ secrets.DEV_SSH_KEY }}
          port: ${{ secrets.DEV_SSH_PORT }}
          script: |
+           docker stop $(docker ps -a) && docker rm $(docker ps -a)
            docker login -u AWS -p ${{ steps.ecr_login.outputs.key }} https://294275771266.dkr.ecr.eu-central-1.amazonaws.com
            docker run -p 3003:3000 --name test-deploy -d ${{ steps.login-ecr.outputs.registry }}/ride-core:${{ github.sha }}
 #   deploy:
