@@ -76,7 +76,7 @@ jobs:
 
       - name: Try to login
         run: |
-          aws ecr get-login --region eu-central-1 --no-include-email
+          aws ecr get-login-password --region eu-central-1
 
       # Connect via ssh to remote server and run docker
       - name: SSH and up a docker container
