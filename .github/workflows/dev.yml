@@ -71,10 +71,12 @@ jobs:
           aws-region: eu-central-1
       # Login to Amazon ECR
       - name: Login to Amazon ECR
-        run: |
-          aws ecr get-login --region eu-central-1 --no-include-email
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Try to login
+        run: |
+          aws ecr get-login --region eu-central-1 --no-include-email
 
       # Connect via ssh to remote server and run docker
       - name: SSH and up a docker container
