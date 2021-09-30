@@ -83,7 +83,7 @@ jobs:
          key: ${{ secrets.DEV_SSH_KEY }}
          port: ${{ secrets.DEV_SSH_PORT }}
          script: |
-           docker run -p 3003:3000 --name test-deploy -d ${{ jobs.build.env.ECR_REGISTRY }}/${{ jobs.build.env.ECR_REPOSITORY }}:${{ jobs.build.env.IMAGE_TAG }}
+           docker run -p 3003:3000 --name test-deploy -d ${{ steps.login-ecr.outputs.registry }}/ride-core:${{ github.sha }}
 #   deploy:
 #     needs: [test]
 #     runs-on: ubuntu-latest
