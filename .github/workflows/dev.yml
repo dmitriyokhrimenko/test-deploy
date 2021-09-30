@@ -83,7 +83,7 @@ jobs:
          key: ${{ secrets.DEV_SSH_KEY }}
          port: ${{ secrets.DEV_SSH_PORT }}
          script: |
-           ls -la
+           docker run -p 3003:3000 --name test-deploy -d $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 #   deploy:
 #     needs: [test]
 #     runs-on: ubuntu-latest
