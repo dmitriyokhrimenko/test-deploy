@@ -93,7 +93,8 @@ jobs:
          key: ${{ secrets.DEV_SSH_KEY }}
          port: ${{ secrets.DEV_SSH_PORT }}
          script: |
-           docker stop $(docker ps -a -q --filter="name=${{ secrets.APP_NAME }}") 000 && docker rm $(docker ps -a -q --filter="name=${{ secrets.APP_NAME }}") 000
+           docker stop $(docker ps -a -q --filter="name=${{ secrets.APP_NAME }}") || true &&
+             docker rm $(docker ps -a -q --filter="name=${{ secrets.APP_NAME }}") || true
            docker login -u AWS -p ${{ steps.get-ecr-login-key.outputs.key }} https://${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
            docker run -p ${{ secrets.APP_PORT }}:3000 --name ${{ secrets.APP_NAME }} -d $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
